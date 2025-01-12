@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch JavaFX App",
+            "request": "launch",
+            "mainClass": "MultiplicationCanvasAnimation",
+            "vmArgs": "--module-path /Users/avigailerez/Documents/javafx-sdk-23.0.1/lib --add-modules javafx.controls"
+        }
+    ]
+}
