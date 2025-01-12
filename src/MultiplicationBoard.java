@@ -62,11 +62,11 @@ public class MultiplicationBoard {
 
     private void drawInitialText() {
         gc.setFill(Color.BLACK);
-        gc.setFont(Font.font("Arial", 20));
+        gc.setFont(Font.font("Futura", 30));
         gc.setTextAlign(TextAlignment.CENTER);
         gc.fillText("Illustrating: " + numColumns + " × " + numRows + " = ?", canvasWidth / 2, 30);
-        gc.fillText("Cubes drawn: 0 / " + totalCubes, canvasWidth / 2, 60);
-        gc.fillText("Rows completed: 0 / " + numRows, canvasWidth / 2, 90);
+        gc.fillText("Cubes drawn: 0 / " + totalCubes, canvasWidth / 2, 70);
+        gc.fillText("Rows completed: 0 / " + numRows, canvasWidth / 2, 110);
     }
 
     private void updateProgress() {
@@ -75,19 +75,22 @@ public class MultiplicationBoard {
 
         // Redraw the updated text
         gc.setFill(Color.BLACK);
-        gc.setFont(Font.font("Arial", 20));
+        gc.setFont(Font.font("Futura", 30));
         gc.setTextAlign(TextAlignment.CENTER);
         gc.fillText("Illustrating: " + numColumns + " × " + numRows + " = " + (numColumns * numRows),
                 canvasWidth / 2, 30);
-        gc.fillText("Cubes drawn: " + cubesDrawn + " / " + totalCubes, canvasWidth / 2, 60);
-        gc.fillText("Rows completed: " + rowsCompleted + " / " + numRows, canvasWidth / 2, 90);
+        gc.fillText("Cubes drawn: " + cubesDrawn + " / " + totalCubes, canvasWidth / 2, 70);
+        gc.fillText("Rows completed: " + rowsCompleted + " / " + numRows, canvasWidth / 2, 110);
     }
 
     private void updateRowCompletion() {
+
+        gc.clearRect(0, canvasHeight - 100, canvasWidth, 50);
+
         gc.setFill(Color.DARKGREEN);
-        gc.setFont(Font.font("Arial", 18));
+        gc.setFont(Font.font("Futura", 30));
         gc.setTextAlign(TextAlignment.CENTER);
-        gc.fillText("Row " + rowsCompleted + " completed!", canvasWidth / 2, 120);
+        gc.fillText("Group " + rowsCompleted + " completed!", canvasWidth / 2, canvasHeight - 70);
     }
 
     private void drawBackground() {

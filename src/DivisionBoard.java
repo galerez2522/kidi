@@ -67,11 +67,11 @@ public class DivisionBoard {
 
     private void drawInitialText() {
         gc.setFill(Color.BLACK);
-        gc.setFont(Font.font("Arial", 20));
+        gc.setFont(Font.font("Futura", 30));
         gc.setTextAlign(TextAlignment.CENTER);
         gc.fillText("Illustrating: " + dividend + " ÷ " + divisor + " = ?", canvasWidth / 2, 30);
-        gc.fillText("Cubes distributed: 0 / " + dividend, canvasWidth / 2, 60);
-        gc.fillText("Quotient counter: 0", canvasWidth / 2, 90); // Initial counter value
+        gc.fillText("Cubes distributed: 0 / " + dividend, canvasWidth / 2, 70);
+        gc.fillText("Quotient counter: 0", canvasWidth / 2, 110); // Initial counter value
     }
 
     private void updateProgress() {
@@ -80,27 +80,28 @@ public class DivisionBoard {
 
         // Redraw the updated text
         gc.setFill(Color.BLACK);
-        gc.setFont(Font.font("Arial", 20));
+        gc.setFont(Font.font("Futura", 30));
         gc.setTextAlign(TextAlignment.CENTER);
         gc.fillText("Illustrating: " + dividend + " ÷ " + divisor + " = " + quotient, canvasWidth / 2, 30);
-        gc.fillText("Cubes distributed: " + totalCubesDistributed + " / " + dividend, canvasWidth / 2, 60);
-        gc.fillText("Quotient counter: " + quotientCounter, canvasWidth / 2, 90);
+        gc.fillText("Cubes distributed: " + totalCubesDistributed + " / " + dividend, canvasWidth / 2, 70);
+        gc.fillText("Quotient counter: " + quotientCounter, canvasWidth / 2, 110);
     }
 
     private void updateQuotientCounter() {
         // Display the updated quotient counter
         gc.setFill(Color.DARKGREEN);
-        gc.setFont(Font.font("Arial", 18));
+        gc.setFont(Font.font("Futura", 30));
         gc.setTextAlign(TextAlignment.CENTER);
         gc.fillText("Quotient counter: " + quotientCounter, canvasWidth / 2, 90);
     }
 
     private void displayFinalMessage() {
+        gc.clearRect(0, canvasHeight - 100, canvasWidth, 100);
         // Display the final message at the bottom of the canvas
         gc.setFill(Color.BLUE);
-        gc.setFont(Font.font("Arial", 22));
+        gc.setFont(Font.font("Futura", 30));
         gc.setTextAlign(TextAlignment.CENTER);
-        gc.fillText("There are " + quotient + " cubes in each group.", canvasWidth / 2, canvasHeight - 50);
+        gc.fillText("There are " + quotient + " cubes in each group.\n Number of groups are " + dividend, canvasWidth / 2, canvasHeight - 60);
     }
 
     private void drawBackground() {
