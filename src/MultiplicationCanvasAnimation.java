@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -37,17 +38,32 @@ public class MultiplicationCanvasAnimation extends Application {
         // Set up the MultiplicationBoard
         MultiplicationBoard board = new MultiplicationBoard(gc, root, CANVAS_WIDTH, CANVAS_HEIGHT, numRows, numColumns);
 
-        // Set up the callback to return to the quiz
+        // Pass the onComplete callback to the board
         board.setOnReturnToQuiz(() -> {
             System.out.println("Returning to the quiz...");
             if (onComplete != null) {
-                onComplete.run(); // Trigger the callback
+                onComplete.run(); // Trigger the callback to return to the quiz
             }
         });
 
-        // Create the animator and start the animation
+        // Set up the animator
         MultiplicationAnimator animator = new MultiplicationAnimator(board);
         animator.start();
+
+        // Add Pause and Run buttons
+        Button pauseButton = new Button("Pause");
+        pauseButton.setLayoutX(20);
+        pauseButton.setLayoutY(CANVAS_HEIGHT - 50);
+        pauseButton.setStyle("-fx-font-size: 14; -fx-background-color: #FFCC00;");
+        pauseButton.setOnAction(e -> animator.pause());
+
+        Button runButton = new Button("Run");
+        runButton.setLayoutX(100);
+        runButton.setLayoutY(CANVAS_HEIGHT - 50);
+        runButton.setStyle("-fx-font-size: 14; -fx-background-color: #4CAF50; -fx-text-fill: white;");
+        runButton.setOnAction(e -> animator.resume());
+
+        root.getChildren().addAll(pauseButton, runButton);
 
         // Set up the scene
         Scene scene = new Scene(root, CANVAS_WIDTH, CANVAS_HEIGHT, Color.LIGHTGRAY);
