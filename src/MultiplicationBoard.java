@@ -29,7 +29,8 @@ public class MultiplicationBoard {
         this.totalCubes = numRows * numColumns;
         this.horizontalCenter = (canvasWidth - (numColumns * (cubeSize + 5))) / 2;
 
-        drawInitialText();
+        drawBackground(); // Draw the white background once
+        drawInitialText(); // Draw initial instructions
     }
 
     public boolean drawNextCube() {
@@ -37,14 +38,16 @@ public class MultiplicationBoard {
             int x = horizontalCenter + currentColumn * (cubeSize + 5);
             int y = startYOffset + currentRow * (cubeSize + 5);
 
+            // Draw the cube
             gc.setFill(Color.color(Math.random(), Math.random(), Math.random()));
             gc.fillRect(x, y, cubeSize, cubeSize);
             gc.setStroke(Color.BLACK);
             gc.strokeRect(x, y, cubeSize, cubeSize);
 
             cubesDrawn++;
-            updateProgress();
+            updateProgress(); // Update text only
 
+            // Move to the next position
             currentColumn++;
             if (currentColumn >= numColumns) {
                 currentColumn = 0;
@@ -67,7 +70,10 @@ public class MultiplicationBoard {
     }
 
     private void updateProgress() {
+        // Clear only the text area
         gc.clearRect(0, 0, canvasWidth, textHeight);
+
+        // Redraw the updated text
         gc.setFill(Color.BLACK);
         gc.setFont(Font.font("Arial", 20));
         gc.setTextAlign(TextAlignment.CENTER);
@@ -82,5 +88,10 @@ public class MultiplicationBoard {
         gc.setFont(Font.font("Arial", 18));
         gc.setTextAlign(TextAlignment.CENTER);
         gc.fillText("Row " + rowsCompleted + " completed!", canvasWidth / 2, 120);
+    }
+
+    private void drawBackground() {
+        gc.setFill(Color.WHITE); // Set the background color to white
+        gc.fillRect(0, 0, canvasWidth, canvasHeight); // Fill the entire canvas once
     }
 }
