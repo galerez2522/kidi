@@ -14,9 +14,9 @@ public class MultiplicationCanvasAnimation extends Application {
     private static final int CANVAS_WIDTH = 600;
     private static final int CANVAS_HEIGHT = 700;
 
-    public MultiplicationCanvasAnimation(int dividend, int divisor) {
-        this.numRows = dividend;
-        this.numColumns = divisor;
+    public MultiplicationCanvasAnimation(int num1, int num2) {
+        this.numRows = num1;
+        this.numColumns = num2;
     }
 
     public void playAnimation(Stage stage, Runnable onComplete) {

@@ -88,7 +88,7 @@ public class MultiplicationBoard {
         gc.setFill(Color.BLACK);
         gc.setFont(Font.font("Futura", 30));
         gc.setTextAlign(TextAlignment.CENTER);
-        gc.fillText("Illustrating: " + numColumns + " × " + numRows + " = " + (numColumns * numRows),
+        gc.fillText("Illustrating: " + numRows + " × " + numColumns + " = " + (numColumns * numRows),
                 canvasWidth / 2, 30);
         gc.fillText("Cubes drawn: " + cubesDrawn + " / " + totalCubes, canvasWidth / 2, 70);
         gc.fillText("Rows completed: " + rowsCompleted + " / " + numRows, canvasWidth / 2, 110);

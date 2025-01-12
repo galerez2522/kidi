@@ -12,7 +12,7 @@ public class DivisionCanvasAnimation extends Application {
     private static int dividend; // Number to divide
     private static int divisor;  // Number of groups
     private static final int CANVAS_WIDTH = 600;
-    private static final int CANVAS_HEIGHT = 700;
+    private static final int CANVAS_HEIGHT = 600;
 
     public DivisionCanvasAnimation(int dividend, int divisor) {
         this.dividend = dividend;
