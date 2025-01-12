@@ -1,10 +1,13 @@
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.layout.Pane;
 
 public class MultiplicationBoard {
     private final GraphicsContext gc;
+    private final Pane root; // Pane to hold the button
     private final int canvasWidth;
     private final int canvasHeight;
     private final int numRows;
@@ -20,8 +23,11 @@ public class MultiplicationBoard {
     private int cubesDrawn = 0;
     private int rowsCompleted = 0;
 
-    public MultiplicationBoard(GraphicsContext gc, int canvasWidth, int canvasHeight, int numRows, int numColumns) {
+    private Runnable onReturnToQuiz; // Callback to return to quiz
+
+    public MultiplicationBoard(GraphicsContext gc, Pane root, int canvasWidth, int canvasHeight, int numRows, int numColumns) {
         this.gc = gc;
+        this.root = root;
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
         this.numRows = numRows;
@@ -31,6 +37,11 @@ public class MultiplicationBoard {
 
         drawBackground(); // Draw the white background once
         drawInitialText(); // Draw initial instructions
+        addReturnToQuizButton(); // Add the button at the start
+    }
+
+    public void setOnReturnToQuiz(Runnable onReturnToQuiz) {
+        this.onReturnToQuiz = onReturnToQuiz;
     }
 
     public boolean drawNextCube() {
@@ -84,7 +95,6 @@ public class MultiplicationBoard {
     }
 
     private void updateRowCompletion() {
-
         gc.clearRect(0, canvasHeight - 100, canvasWidth, 50);
 
         gc.setFill(Color.DARKGREEN);
@@ -94,7 +104,23 @@ public class MultiplicationBoard {
     }
 
     private void drawBackground() {
-        gc.setFill(Color.WHITE); // Set the background color to white
-        gc.fillRect(0, 0, canvasWidth, canvasHeight); // Fill the entire canvas once
+        gc.setFill(Color.WHITE);
+        gc.fillRect(0, 0, canvasWidth, canvasHeight);
+    }
+
+    private void addReturnToQuizButton() {
+        Button returnButton = new Button("Return to Quiz");
+        returnButton.setStyle("-fx-font-size: 16; -fx-padding: 10;");
+        returnButton.setLayoutX(canvasWidth / 2 - 60);
+        returnButton.setLayoutY(canvasHeight - 50);
+
+        // Add action for the button
+        returnButton.setOnAction(event -> {
+            if (onReturnToQuiz != null) {
+                onReturnToQuiz.run();
+            }
+        });
+
+        root.getChildren().add(returnButton);
     }
 }

@@ -1,10 +1,13 @@
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.layout.Pane;
 
 public class DivisionBoard {
     private final GraphicsContext gc;
+    private final Pane root; // Pane to hold the button
     private final int canvasWidth;
     private final int canvasHeight;
     private final int dividend;
@@ -20,9 +23,11 @@ public class DivisionBoard {
     private int quotientCounter = 0; // Tracks how many groups are fully formed
 
     private boolean animationComplete = false; // Tracks whether all cubes are distributed
+    private Runnable onReturnToQuiz; // Callback for returning to the quiz
 
-    public DivisionBoard(GraphicsContext gc, int canvasWidth, int canvasHeight, int dividend, int divisor) {
+    public DivisionBoard(GraphicsContext gc, Pane root, int canvasWidth, int canvasHeight, int dividend, int divisor) {
         this.gc = gc;
+        this.root = root;
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
         this.dividend = dividend;
@@ -31,6 +36,11 @@ public class DivisionBoard {
 
         drawBackground();
         drawInitialText();
+        addReturnToQuizButton(); // Add the button immediately during initialization
+    }
+
+    public void setOnReturnToQuiz(Runnable onReturnToQuiz) {
+        this.onReturnToQuiz = onReturnToQuiz;
     }
 
     public boolean distributeNextCube() {
@@ -101,11 +111,28 @@ public class DivisionBoard {
         gc.setFill(Color.BLUE);
         gc.setFont(Font.font("Futura", 30));
         gc.setTextAlign(TextAlignment.CENTER);
-        gc.fillText("There are " + quotient + " cubes in each group.\n Number of groups are " + dividend, canvasWidth / 2, canvasHeight - 60);
+        gc.fillText("There are " + quotient + " cubes in each group.\nNumber of groups: " + divisor, canvasWidth / 2, canvasHeight - 100);
     }
 
     private void drawBackground() {
         gc.setFill(Color.WHITE);
         gc.fillRect(0, 0, canvasWidth, canvasHeight);
+    }
+
+    private void addReturnToQuizButton() {
+        Button returnButton = new Button("Return to Quiz");
+        returnButton.setStyle("-fx-font-size: 16; -fx-padding: 10;");
+        returnButton.setLayoutX(canvasWidth / 2 - 60);
+        returnButton.setLayoutY(canvasHeight - 50);
+
+        // Add action for the button
+        returnButton.setOnAction(event -> {
+            System.out.println("Return to Quiz button clicked!"); // Debug message
+            if (onReturnToQuiz != null) {
+                onReturnToQuiz.run();
+            }
+        });
+
+        root.getChildren().add(returnButton); // Add the button to the root layout
     }
 }
