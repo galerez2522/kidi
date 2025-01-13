@@ -7,12 +7,12 @@ import javafx.scene.layout.Pane;
 
 public class DivisionBoard {
     private final GraphicsContext gc;
-    private final Pane root; // Pane to hold the button
+    private final Pane root;
     private final int canvasWidth;
     private final int canvasHeight;
     private final int dividend;
     private final int divisor;
-    private final int quotient; // Result of the division
+    private final int quotient;
     private final int cubeSize = 30;
     private final int textHeight = 150;
     private final int startYOffset = textHeight + 20;
@@ -20,10 +20,10 @@ public class DivisionBoard {
     private int currentGroup = 0;
     private int cubesInCurrentGroup = 0;
     private int totalCubesDistributed = 0;
-    private int quotientCounter = 0; // Tracks how many groups are fully formed
+    private int quotientCounter = 0;
 
-    private boolean animationComplete = false; // Tracks whether all cubes are distributed
-    private Runnable onReturnToQuiz; // Callback for returning to the quiz
+    private boolean animationComplete = false;
+    private Runnable onReturnToQuiz;
 
     public DivisionBoard(GraphicsContext gc, Pane root, int canvasWidth, int canvasHeight, int dividend, int divisor) {
         this.gc = gc;
@@ -36,7 +36,7 @@ public class DivisionBoard {
 
         drawBackground();
         drawInitialText();
-        addReturnToQuizButton(); // Add the button immediately during initialization
+        addReturnToQuizButton();
     }
 
     public void setOnReturnToQuiz(Runnable onReturnToQuiz) {
@@ -49,30 +49,51 @@ public class DivisionBoard {
             int x = groupXStart + currentGroup * (cubeSize + 10);
             int y = startYOffset + cubesInCurrentGroup * (cubeSize + 5);
 
-            // Draw the cube
             gc.setFill(Color.color(Math.random(), Math.random(), Math.random()));
             gc.fillRect(x, y, cubeSize, cubeSize);
-            gc.setStroke(Color.BLACK);
-            gc.strokeRect(x, y, cubeSize, cubeSize);
 
             totalCubesDistributed++;
             cubesInCurrentGroup++;
 
-            // If a group is fully formed, increment the counter and move to the next group
             if (cubesInCurrentGroup >= quotient) {
+                drawEllipseAroundGroup(currentGroup);
                 cubesInCurrentGroup = 0;
                 currentGroup++;
                 quotientCounter++;
-                updateQuotientCounter(); // Update the displayed quotient counter
+                updateQuotientCounter();
             }
 
             updateProgress();
             return true;
         } else if (!animationComplete) {
-            displayFinalMessage(); // Display the final message when all cubes are distributed
-            animationComplete = true; // Ensure this message is only displayed once
+            animationComplete = true;
+            displayFinalMessage();
         }
-        return false; // All cubes are distributed
+        return false;
+    }
+
+    private void drawEllipseAroundGroup(int groupIndex) {
+        int groupXStart = (canvasWidth - (divisor * (cubeSize + 10))) / 2;
+        int x = groupXStart + groupIndex * (cubeSize + 10);
+        int yStart = startYOffset;
+        int groupHeight = quotient * (cubeSize + 5);
+
+        gc.setStroke(Color.RED);
+        gc.setLineWidth(3);
+        gc.strokeOval(x - 5, yStart - 5, cubeSize + 10, groupHeight + 10);
+    }
+
+    private void displayFinalMessage() {
+        int messageY = canvasHeight - 150;
+
+        gc.setFill(Color.LIGHTGRAY);
+        gc.fillRect(0, messageY - 30, canvasWidth, 80);
+
+        gc.setFill(Color.BLACK);
+        gc.setFont(Font.font("Futura", 20));
+        gc.setTextAlign(TextAlignment.CENTER);
+        gc.fillText("There are " + quotient + " cubes in each group.", canvasWidth / 2, messageY);
+        gc.fillText("Number of groups: " + divisor, canvasWidth / 2, messageY + 20);
     }
 
     private void drawInitialText() {
@@ -81,14 +102,12 @@ public class DivisionBoard {
         gc.setTextAlign(TextAlignment.CENTER);
         gc.fillText("Illustrating: " + dividend + " ÷ " + divisor + " = ?", canvasWidth / 2, 30);
         gc.fillText("Cubes distributed: 0 / " + dividend, canvasWidth / 2, 70);
-        gc.fillText("Quotient counter: 0", canvasWidth / 2, 110); // Initial counter value
+        gc.fillText("Quotient counter: 0", canvasWidth / 2, 110);
     }
 
     private void updateProgress() {
-        // Clear only the text area
         gc.clearRect(0, 0, canvasWidth, textHeight);
 
-        // Redraw the updated text
         gc.setFill(Color.BLACK);
         gc.setFont(Font.font("Futura", 30));
         gc.setTextAlign(TextAlignment.CENTER);
@@ -98,20 +117,10 @@ public class DivisionBoard {
     }
 
     private void updateQuotientCounter() {
-        // Display the updated quotient counter
         gc.setFill(Color.DARKGREEN);
         gc.setFont(Font.font("Futura", 30));
         gc.setTextAlign(TextAlignment.CENTER);
         gc.fillText("Quotient counter: " + quotientCounter, canvasWidth / 2, 90);
-    }
-
-    private void displayFinalMessage() {
-        gc.clearRect(0, canvasHeight - 100, canvasWidth, 100);
-        // Display the final message at the bottom of the canvas
-        gc.setFill(Color.BLUE);
-        gc.setFont(Font.font("Futura", 30));
-        gc.setTextAlign(TextAlignment.CENTER);
-        gc.fillText("There are " + quotient + " cubes in each group.\nNumber of groups: " + divisor, canvasWidth / 2, canvasHeight - 100);
     }
 
     private void drawBackground() {
@@ -125,14 +134,13 @@ public class DivisionBoard {
         returnButton.setLayoutX(canvasWidth / 2 - 60);
         returnButton.setLayoutY(canvasHeight - 50);
 
-        // Add action for the button
         returnButton.setOnAction(event -> {
-            System.out.println("Return to Quiz button clicked!"); // Debug message
+            System.out.println("Return to Quiz button clicked!");
             if (onReturnToQuiz != null) {
                 onReturnToQuiz.run();
             }
         });
 
-        root.getChildren().add(returnButton); // Add the button to the root layout
+        root.getChildren().add(returnButton);
     }
 }

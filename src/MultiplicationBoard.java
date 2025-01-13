@@ -1,21 +1,26 @@
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.layout.Pane;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 public class MultiplicationBoard {
     private final GraphicsContext gc;
-    private final Pane root; // Pane to hold the button
+    private final Pane root;
     private final int canvasWidth;
     private final int canvasHeight;
     private final int numRows;
     private final int numColumns;
     private final int totalCubes;
-    private final int cubeSize = 30;
+    private final int cubeSize = 22; // Cube size
     private final int textHeight = 150;
-    private final int startYOffset = textHeight + 20;
+    private final int rowSpacing = 15; // Spacing between rows
+    private final int cubeSpacing = 6; // Spacing between cubes
+    private final int startYOffset = textHeight + 20; // Vertical offset
     private final int horizontalCenter;
 
     private int currentRow = 0;
@@ -23,7 +28,8 @@ public class MultiplicationBoard {
     private int cubesDrawn = 0;
     private int rowsCompleted = 0;
 
-    private Runnable onReturnToQuiz; // Callback to return to quiz
+    private Color[][] cubeColors; // 2D array to store cube colors
+    private Runnable onReturnToQuiz;
 
     public MultiplicationBoard(GraphicsContext gc, Pane root, int canvasWidth, int canvasHeight, int numRows, int numColumns) {
         this.gc = gc;
@@ -33,11 +39,13 @@ public class MultiplicationBoard {
         this.numRows = numRows;
         this.numColumns = numColumns;
         this.totalCubes = numRows * numColumns;
-        this.horizontalCenter = (canvasWidth - (numColumns * (cubeSize + 5))) / 2;
+        this.horizontalCenter = (canvasWidth - (numColumns * (cubeSize + cubeSpacing))) / 2;
 
-        drawBackground(); // Draw the white background once
-        drawInitialText(); // Draw initial instructions
-        addReturnToQuizButton(); // Add the button at the start
+        this.cubeColors = new Color[numRows][numColumns];
+
+        drawBackground();
+        drawInitialText();
+        addReturnToQuizButton();
     }
 
     public void setOnReturnToQuiz(Runnable onReturnToQuiz) {
@@ -46,29 +54,68 @@ public class MultiplicationBoard {
 
     public boolean drawNextCube() {
         if (currentRow < numRows) {
-            int x = horizontalCenter + currentColumn * (cubeSize + 5);
-            int y = startYOffset + currentRow * (cubeSize + 5);
+            int x = horizontalCenter + currentColumn * (cubeSize + cubeSpacing);
+            int y = startYOffset + currentRow * (cubeSize + cubeSpacing + rowSpacing);
 
-            // Draw the cube
-            gc.setFill(Color.color(Math.random(), Math.random(), Math.random()));
+            if (cubeColors[currentRow][currentColumn] == null) {
+                cubeColors[currentRow][currentColumn] = Color.color(Math.random(), Math.random(), Math.random());
+            }
+            Color cubeColor = cubeColors[currentRow][currentColumn];
+
+            gc.setFill(cubeColor);
             gc.fillRect(x, y, cubeSize, cubeSize);
-            gc.setStroke(Color.BLACK);
-            gc.strokeRect(x, y, cubeSize, cubeSize);
 
             cubesDrawn++;
-            updateProgress(); // Update text only
+            updateProgress();
 
-            // Move to the next position
             currentColumn++;
             if (currentColumn >= numColumns) {
                 currentColumn = 0;
                 currentRow++;
                 rowsCompleted++;
-                updateRowCompletion();
+                updateRowCompletion(rowsCompleted - 1);
+            }
+            if (cubesDrawn == totalCubes) {
+                displayFinalMessage();
             }
             return true;
         }
-        return false; // No more cubes to draw
+        return false;
+    }
+
+    private void updateRowCompletion(int completedRow) {
+        int y = startYOffset + completedRow * (cubeSize + cubeSpacing + rowSpacing);
+        int ellipseX = horizontalCenter - 5;
+        int ellipseWidth = numColumns * (cubeSize + cubeSpacing) + 10;
+        int ellipseHeight = cubeSize + 10;
+
+        // Draw the ellipse after the row is completed
+        Timeline timeline = new Timeline(
+            new KeyFrame(Duration.millis(1000), e -> drawEllipseAroundRow(ellipseX, y, ellipseWidth, ellipseHeight))
+        );
+        timeline.setCycleCount(1);
+        timeline.play();
+    }
+
+    private void drawEllipseAroundRow(int ellipseX, int y, int ellipseWidth, int ellipseHeight) {
+        gc.setStroke(Color.RED);
+        gc.setLineWidth(3);
+        gc.strokeOval(ellipseX, y - 5, ellipseWidth, ellipseHeight);
+    }
+
+    private void displayFinalMessage() {
+        int messageY = canvasHeight - 100; // Position for the message
+
+        // Draw a background rectangle for the message
+        gc.setFill(Color.LIGHTGRAY);
+        gc.fillRect(0, messageY - 30, canvasWidth, 80);
+
+        // Display the final message
+        gc.setFill(Color.BLUE);
+        gc.setFont(Font.font("Futura", 20));
+        gc.setTextAlign(TextAlignment.CENTER);
+        gc.fillText("Multiplication Completed!", canvasWidth / 2, messageY);
+        gc.fillText("Total Rows: " + numRows + ", Total Columns: " + numColumns, canvasWidth / 2, messageY + 20);
     }
 
     private void drawInitialText() {
@@ -81,10 +128,8 @@ public class MultiplicationBoard {
     }
 
     private void updateProgress() {
-        // Clear only the text area
         gc.clearRect(0, 0, canvasWidth, textHeight);
 
-        // Redraw the updated text
         gc.setFill(Color.BLACK);
         gc.setFont(Font.font("Futura", 30));
         gc.setTextAlign(TextAlignment.CENTER);
@@ -92,15 +137,6 @@ public class MultiplicationBoard {
                 canvasWidth / 2, 30);
         gc.fillText("Cubes drawn: " + cubesDrawn + " / " + totalCubes, canvasWidth / 2, 70);
         gc.fillText("Rows completed: " + rowsCompleted + " / " + numRows, canvasWidth / 2, 110);
-    }
-
-    private void updateRowCompletion() {
-        gc.clearRect(0, canvasHeight - 100, canvasWidth, 50);
-
-        gc.setFill(Color.DARKGREEN);
-        gc.setFont(Font.font("Futura", 30));
-        gc.setTextAlign(TextAlignment.CENTER);
-        gc.fillText("Group " + rowsCompleted + " completed!", canvasWidth / 2, canvasHeight - 70);
     }
 
     private void drawBackground() {
@@ -114,7 +150,6 @@ public class MultiplicationBoard {
         returnButton.setLayoutX(canvasWidth / 2 - 60);
         returnButton.setLayoutY(canvasHeight - 50);
 
-        // Add action for the button
         returnButton.setOnAction(event -> {
             if (onReturnToQuiz != null) {
                 onReturnToQuiz.run();
