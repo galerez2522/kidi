@@ -6,14 +6,14 @@ This game is an interactive tool designed to help children learn the multiplicat
 ## System Requirements
 The game is built in Java and requires JavaFX components to run. To play the game, the following components need to be installed:  
 
-JDK 21 (or higher)  
-JavaFX 23.0.1 (or higher)  
+1. `JDK 21` (or higher)  
+2. `JavaFX 23.0.1` (or higher)  
   
 ### Step 1: Download and Install the JDK  
-Download JDK 21 (or higher) from Oracle's official website.  
+Download `JDK 21` (or higher) from Oracle's official website.  
   
 ### Step 2: Download and Install JavaFX  
-Download JavaFX 23.0.1 (or higher) from Gluon JavaFX website.  
+Download `JavaFX 23.0.1` (or higher) from Gluon JavaFX website.  
   
 Once downloaded, extract the JavaFX SDK files to a location on your computer.    
   
@@ -25,13 +25,13 @@ Set JAVA_HOME and PATH:
 export JAVA_HOME=/path/to/your/jdk
 export PATH=$JAVA_HOME/bin:$PATH
 ```  
-Replace /path/to/your/jdk with the path where your JDK is installed.  
+Replace `/path/to/your/jdk` with the path where your JDK is installed.  
   
 Set JavaFX Path:  
 ```bash  
 export JAVA_FX_LIB_PATH=/path/to/javafx-sdk/lib
 ```  
-Replace "/path/to/javafx-sdk/lib" with the path to the lib folder of the JavaFX SDK you downloaded.
+Replace `/path/to/javafx-sdk/lib` with the path to the lib folder of the JavaFX SDK you downloaded.
   
 ### Step 4: Download the JAR File from GitHub  
 To run the game, you can simply download the JAR file and run it directly.  
@@ -47,9 +47,9 @@ java --module-path /path/to/javafx-sdk/lib --add-modules javafx.controls -jar My
 ```  
 This command:  
 
---module-path /path/to/javafx-sdk/lib: Specifies the path to the JavaFX lib directory.  
---add-modules javafx.controls: Adds the javafx.controls module at runtime.   
--jar MyGame.jar: Runs the JAR file you downloaded.  
+`--module-path /path/to/javafx-sdk/lib`: Specifies the path to the JavaFX lib directory.  
+`--add-modules javafx.controls`: Adds the javafx.controls module at runtime.   
+`-jar MyGame.jar`: Runs the JAR file you downloaded.  
 
 ## Enjoy !
   
